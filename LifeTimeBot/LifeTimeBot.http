@@ -1,0 +1,6 @@
+@LifeTimeBot_HostAddress = http://localhost:5079
+
+GET {{LifeTimeBot_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
