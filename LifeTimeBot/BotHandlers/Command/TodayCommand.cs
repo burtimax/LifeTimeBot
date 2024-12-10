@@ -12,7 +12,7 @@ using Telegram.BotAPI.GettingUpdates;
 namespace MetalBoardBot.BotHandlers.Command;
 
 [BotHandler(command: "/today", version: 2.0f)]
-public class TodayCommand : BaseLifeTimeBotCommand
+public class TodayCommand : BaseLifeTimeBotHandler
 {
     private const string lastTodayMes = "lastToday";
     private readonly ActivityService _activityService;
@@ -22,16 +22,15 @@ public class TodayCommand : BaseLifeTimeBotCommand
         _activityService = serviceProvider.GetRequiredService<ActivityService>();
     }
 
-    public override async Task SendIntroduction()
+    public override async Task HandleBotRequest(Update update)
     {
-        if (User.AdditionalProperties.Contains(AppConstants.UserUtcPropKey) == false)
+        if (GetUserUtc() == null)
         {
             await Answer(R.NoActivitiesToday);
             return;
         }
         
-        int utcOffset = User.AdditionalProperties.Get<int>(AppConstants.UserUtcPropKey);
-        List<ActivityEntity> activities = await _activityService.GetTodayActivities(Chat.ChatId, utcOffset);
+        List<ActivityEntity> activities = await _activityService.Get24HoursActivities(BotId, Chat.ChatId, GetUserUtc()!.Value);
         
         if (activities is null || activities.Any() == false)
         {
@@ -54,10 +53,5 @@ public class TodayCommand : BaseLifeTimeBotCommand
         Message mes = await Answer(sb.ToString());
         Chat.Data.Set(lastTodayMes, mes.MessageId);
         await BotDbContext.SaveChangesAsync();
-    }
-
-    public override async Task HandleBotRequest(Update update)
-    {
-        await SendIntroduction();
     }
 }

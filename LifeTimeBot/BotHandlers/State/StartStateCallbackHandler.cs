@@ -17,7 +17,7 @@ using Telegram.BotAPI.UpdatingMessages;
 namespace LifeTimeBot.BotHandlers.State;
 
 [BotHandler(stateName:StartState.Name, updateTypes:new [] { UpdateType.CallbackQuery }, version: 2.0)]
-public class StartStateCallbackHandler: BaseLifeTimeBotState
+public class StartStateCallbackHandler: BaseLifeTimeBotHandler
 {
     public StartStateCallbackHandler(IServiceProvider serviceProvider) : base(serviceProvider)
     {
@@ -30,11 +30,9 @@ public class StartStateCallbackHandler: BaseLifeTimeBotState
         await AnswerCallback();
         if (data.StartsWith(R.BtnChooseUtcKey))
         {
-            int diff = int.Parse(data.Substring(R.BtnChooseUtcKey.Length));
-            User.AdditionalProperties.Set(AppConstants.UserUtcPropKey, diff);
-            BotDbContext.Update(User);
-            await BotDbContext.SaveChangesAsync();
-            await Answer(string.Format(R.UserChosenUtc, AppConstants.UTCTimezones.Where(u => u.Difference == diff).First().Title));
+            int offset = int.Parse(data.Substring(R.BtnChooseUtcKey.Length));
+            await SetUserUtc(offset);
+            await Answer(string.Format(R.UserChosenUtc, AppConstants.UTCTimezones.Where(u => u.Difference == offset).First().Title));
             await ChangeState(MainState.Name);
             await this.GetHandlerInstance<MainState>().SendIntroduction();
         }

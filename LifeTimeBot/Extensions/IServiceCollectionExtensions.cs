@@ -66,5 +66,6 @@ public static class IServiceCollectionExtensions
         services.AddScoped<AsrService>();
         services.AddScoped<LlmService>();
         services.AddScoped<ActivityService>();
+        services.AddScoped<UserUtcService>();
     }
 }

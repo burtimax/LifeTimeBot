@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+namespace LifeTimeBot.Services.LLM.Dto;
+
 public class ChatCompletionResponse
 {
     [JsonPropertyName("object")]

@@ -15,7 +15,7 @@ using Telegram.BotAPI.UpdatingMessages;
 namespace LifeTimeBot.BotHandlers.State;
 
 [BotHandler(version: 2.0, updateTypes:new []{UpdateType.Message})]
-public class DefaultMessageHandler: BaseLifeTimeBotState
+public class DefaultMessageHandler: BaseLifeTimeBotHandler
 {
  
     

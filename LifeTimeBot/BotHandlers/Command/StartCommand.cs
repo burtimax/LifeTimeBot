@@ -7,7 +7,7 @@ using Telegram.BotAPI.GettingUpdates;
 namespace MetalBoardBot.BotHandlers.Command;
 
 [BotHandler(command: "/start", version: 2.0f)]
-public class StartCommand : BaseLifeTimeBotCommand
+public class StartCommand : BaseLifeTimeBotHandler
 {
     public StartCommand(IServiceProvider serviceProvider) : base(serviceProvider)
     {
@@ -16,6 +16,6 @@ public class StartCommand : BaseLifeTimeBotCommand
     public override async Task HandleBotRequest(Update update)
     {
         await ChangeState(StartState.Name);
-        await this.GetHandlerInstance<StartState>().SendIntroduction();
+        await this.HandleBotRequest<StartState>();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using LifeTimeBot.Models;
 
-namespace LifeTimeBot.Services.LLM;
+namespace LifeTimeBot.Services.LLM.Dto;
 
 public class LlmActivityDataResult
 {

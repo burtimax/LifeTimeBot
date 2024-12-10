@@ -17,7 +17,7 @@ using Telegram.BotAPI.UpdatingMessages;
 namespace LifeTimeBot.BotHandlers.State;
 
 [BotHandler(stateName:Name, version: 2.0)]
-public class StartState: BaseLifeTimeBotState
+public class StartState: BaseLifeTimeBotHandler
 {
     public const string Name = "StartState";
     
@@ -25,7 +25,7 @@ public class StartState: BaseLifeTimeBotState
     {
     }
 
-    public override async Task SendIntroduction()
+    public override async Task HandleBotRequest(Update update)
     {
         var utc = AppConstants.UTCTimezones;
         InlineKeyboardBuilder kb = new InlineKeyboardBuilder();
@@ -38,10 +38,5 @@ public class StartState: BaseLifeTimeBotState
         }
 
         await Answer(R.ChooseUtc, replyMarkup: kb.Build());
-    }
-
-    public override async Task HandleBotRequest(Update update)
-    {
-        await SendIntroduction();
     }
 }

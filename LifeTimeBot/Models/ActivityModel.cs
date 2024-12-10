@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using LifeTimeBot.Db.AppDb.Entities;
+using LifeTimeBot.Extensions;
 
 namespace LifeTimeBot.Models;
 
@@ -13,9 +14,15 @@ public class ActivityModel
 
     [JsonPropertyName("action")]
     public string Action { get; set; }
+    
+    [JsonPropertyName("type")]
+    public ActivityType Type { get; set; }
+    
+    [JsonPropertyName("balance")]
+    public List<BalanceType> BalanceTypes { get; set; }
 
 
-    public ActivityEntity ToEntity(long chatId, int utc, string? fileId, int? messageId, string? messageText)
+    public ActivityEntity ToEntity(long botId, long chatId, int utc, string? fileId = null, int? messageId = null, string? messageText = null)
     {
         // Погрешность, если пользователь указал время окончания чуть больше текущего времени.
         int hoursError = 2;
@@ -40,17 +47,26 @@ public class ActivityModel
             startDate = endDate.AddDays(-1);
             startDate = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hour, startTime.Minute, startTime.Second);
         }
+
+        // Приводим к виду предложения.
+        if (string.IsNullOrEmpty(this.Action.Trim(' ')) == false)
+        {
+            this.Action = this.Action.Trim(' ').FirstCharToUpper();
+        }
         
         return new ActivityEntity()
         {
+            BotId = botId,
             Confirmed = false,
             StartTime = startDate,
             EndTime = endDate,
-            Description = Action,
+            Description = this.Action,
             TelegramChatId = chatId,
             AudioFileId = fileId,
             MessageId = messageId,
             MessageText = messageText,
+            Type = this.Type,
+            BalanceTypes = this.BalanceTypes,
         };
     }
 }

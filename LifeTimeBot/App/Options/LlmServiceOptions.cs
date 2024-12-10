@@ -8,5 +8,6 @@ public class LlmServiceOptions
     public double Temperature { get; set; }
     public double TopP { get; set; }
     public int MaxTokens { get; set; }
-    public string PromptTemplate { get; set; }
+    public string GetActivityPromptTemplate { get; set; }
+    public string GetRecommendationsForRoutinePromptTemplate { get; set; }
 }

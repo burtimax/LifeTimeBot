@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using LifeTimeBot.App.Options;
+using LifeTimeBot.Services.LLM.Dto;
 using Microsoft.Extensions.Options;
 
 namespace LifeTimeBot.Services.LLM;
@@ -21,10 +22,10 @@ public partial class LlmService
     {
         var request = new HttpRequestMessage(HttpMethod.Post, _llmOptions.Url);
         request.Headers.Add("accept", "*/*");
-        request.Headers.Add("accept-language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
+        request.Headers.Add("accept-language", "ru-RU,ru;q=0.9,en-US;q=0.7,en;q=0.7");
         request.Headers.Add("authorization", $"Bearer {_llmOptions.ApiKey}");
         // request.Headers.Add("content-type", "application/json");
-        request.Headers.Add("user-agent", "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36");
+        // request.Headers.Add("user-agent", "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36");
 
         LlmRequestData requestData = new()
         {
@@ -60,6 +61,12 @@ public partial class LlmService
             return response.Choices.FirstOrDefault().Message?.Content ?? null;
         }
 
+        return null;
+    }
+
+
+    public async Task<string> GetAnswerFromLlmSSE()
+    {
         return null;
     }
 }

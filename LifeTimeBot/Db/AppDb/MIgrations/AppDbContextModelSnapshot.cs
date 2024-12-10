@@ -37,6 +37,21 @@ namespace LifeTimeBot.Db.AppDb.Migrations
                         .HasColumnName("audio_file_id")
                         .HasComment("FileId голосового");
 
+                    b.Property<int[]>("BalanceTypes")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("balance_types")
+                        .HasComment("Сферы жизненного баланса активности.");
+
+                    b.Property<long>("BotId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("bot_id");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text")
+                        .HasColumnName("comment")
+                        .HasComment("Комментарий к активности, подробности от пользователя.");
+
                     b.Property<bool>("Confirmed")
                         .HasColumnType("boolean")
                         .HasColumnName("confirmed")
@@ -91,6 +106,11 @@ namespace LifeTimeBot.Db.AppDb.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("telegram_chat_id")
                         .HasComment("ИД чата, владельца активности");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type")
+                        .HasComment("Тип активности.");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")

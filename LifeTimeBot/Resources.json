@@ -5,6 +5,7 @@
   "TooLongVoice": "Слишком длинное голосовое, запишите по-короче)",
   "CannotRecognizeTextInVoice": "Не могу распознать текст",
   "NotFoundActivityInVoice": "Вот что вы сказали\n\n{0}\n\nНеобходимо по шаблону: С [время начала] до [время окончания] [что делали]",
+  "NotFoundActivityInText": "Необходимо ввести по шаблону: С [время начала] до [время окончания] [что делали]",
   "ActivityTemplate": "Время начала: {0}\nВремя окончания: {1}\nАктивность: {2}",
   "ActivityListItemTemplate": "{0}-{1}: {2}",
   "InProgress": "Обрабатываю...",
@@ -12,5 +13,29 @@
   "BtnCancelActivity": "Удалить",
   "ChooseUtc": "Выберете ваш часовой пояс",
   "UserChosenUtc": "Вы выбрали часовой пояс {0}.\nДля смены часового пояса введите команду /start",
-  "NoActivitiesToday": "Нет записей на сегодня"
+  "NoActivitiesToday": "Нет записей на сегодня",
+  "MinActivitiesCountForAiDailyRecommendation": 5,
+  "NotEnoughActivityForAiDailyRecommendation": "Для получения анализа ИИ необходимо добавить минимум {{MinActivitiesCountForAiDailyRecommendation}} записей",
+  "NoRecommendationsForDaily": "Нет рекомендаций",
+  "AppResources": {
+    "BalanceTypes": {
+      "None": "Другое",
+      "СareerWorkBusiness": "Карьера/Бизнес",
+      "LoveFamilyChildren": "Любовь/Семья",
+      "HealthyAndSport": "Здоровье/Спорт",
+      "FriendsAndCommunity": "Друзья/Окружение",
+      "HobbyAndBrightnessOfLife": "Хобби/Развлечения",
+      "PersonalDevelopmentAndEducation": "Личностный рост",
+      "Finance": "Финансы",
+      "Spirituality": "Духовность"
+    },
+    "ActivityTypes": {
+      "None": "Другое",
+      "Sleep": "Сон",
+      "Sport": "Спорт",
+      "Work": "Работа",
+      "Education": "Обучение",
+      "Relax": "Отдых"
+    }
+  }
 }

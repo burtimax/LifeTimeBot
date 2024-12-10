@@ -1,12 +1,16 @@
-﻿namespace LifeTimeBot.Resources;
+﻿using LifeTimeBot.Resources.Nested;
+
+namespace LifeTimeBot.Resources;
 
 public partial class BotResources
 {
+    public AppResources AppResources { get; set; }
     public string Introduction { get; set; }
     public string MainStateIntroduction { get; set; }
     public string DontUnderstandYou { get; set; }
     public string TooLongVoice { get; set; }
     public string CannotRecognizeTextInVoice { get; set; }
+    public string NotFoundActivityInText { get; set; }
     public string NotFoundActivityInVoice { get; set; }
     public string ActivityTemplate { get; set; }
     public string ActivityListItemTemplate { get; set; }
@@ -22,4 +26,7 @@ public partial class BotResources
     public string BtnChooseUtcCallback(int utcDifference) => $"{BtnChooseUtcKey}{utcDifference}";
     public string UserChosenUtc { get; set; }
     public string NoActivitiesToday { get; set; }
+    public int MinActivitiesCountForAiDailyRecommendation { get; set; }
+    public string NotEnoughActivityForAiDailyRecommendation { get; set; }
+    public string NoRecommendationsForDaily { get; set; }
 }

@@ -9,7 +9,7 @@ using Telegram.BotAPI.AvailableTypes;
 namespace LifeTimeBot.BotHandlers.State;
 
 [BotHandler(stateName:MainState.Name, updateTypes:new []{UpdateType.CallbackQuery}, version: 2)]
-public class MainStateCallbackHandler: BaseLifeTimeBotState
+public class MainStateCallbackHandler: BaseLifeTimeBotHandler
 {
     private readonly ActivityService _activityService;
     
@@ -45,6 +45,6 @@ public class MainStateCallbackHandler: BaseLifeTimeBotState
 
     private async Task SendTodayList()
     {
-        await this.GetHandlerInstance<TodayCommand>().SendIntroduction();
+        await this.HandleBotRequest<TodayCommand>();
     }
 }

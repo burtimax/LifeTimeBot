@@ -59,7 +59,26 @@ BotResources botResources = services.ConfigureBotResources(botConfig.ResourcesFi
 services.AddBot(botConfig, botOptions: botOptions); // Подключаем бота
 services.AddControllers();//.AddNewtonsoftJson(); //Обязательно подключаем NewtonsoftJson
 services.AddHttpContextAccessor();
-services.AddCors();
+
+bool CorsConfigIsNotNull() =>
+    config.Cors is not null && config.Cors.AllowOrigins is not null && config.Cors.AllowOrigins.Any();
+
+if (CorsConfigIsNotNull())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: "AllowOnlySomeOrigins",
+            configurePolicy: policy =>
+            {
+                policy.WithOrigins(config.Cors.AllowOrigins.ToArray());
+            });
+    });
+}
+else
+{
+    builder.Services.AddCors();
+}
+
 services.AddMapster();
 
 // Свои сервисы
@@ -83,10 +102,19 @@ if (app.Environment.IsDevelopment())
 {
 }
 //app.UseHttpsRedirection();
-app.UseCors(builder =>
+
+if (CorsConfigIsNotNull())
 {
-    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-});
+    app.UseCors("AllowOnlySomeOrigins");
+}
+else
+{
+    app.UseCors(builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+}
+
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
