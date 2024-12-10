@@ -31,6 +31,9 @@ public class ActivityModel
         DateTime endTime = DateTime.Parse(EndTime);
         
         DateTime now = DateTime.UtcNow.AddHours(utc);
+        startTime = new DateTime(now.Year, now.Month, now.Day, startTime.Hour, startTime.Minute, startTime.Second);
+        endTime = new DateTime(now.Year, now.Month, now.Day, endTime.Hour, endTime.Minute, endTime.Second);
+        
         DateTime endDate = now.Date;
         DateTime startDate = now.Date;
         if (endTime > now.AddHours(hoursError))
