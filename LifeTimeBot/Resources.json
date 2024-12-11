@@ -1,22 +1,4 @@
 {
-  "Introduction" : "Привет, как дела",
-  "MainStateIntroduction" : "Записывайте голосовые сообщения с пометками о том, что делали в течении дня.\nНапример: 7:00 до 7:15 делал утреннюю зарядку.\nОбязательно указывайте время начала и окончания действия.",
-  "DontUnderstandYou": "Я понимаю только голосовые сообщения",
-  "TooLongVoice": "Слишком длинное голосовое, запишите по-короче)",
-  "CannotRecognizeTextInVoice": "Не могу распознать текст",
-  "NotFoundActivityInVoice": "Вот что вы сказали\n\n{0}\n\nНеобходимо по шаблону: С [время начала] до [время окончания] [что делали]",
-  "NotFoundActivityInText": "Необходимо ввести по шаблону: С [время начала] до [время окончания] [что делали]",
-  "ActivityTemplate": "Время начала: {0}\nВремя окончания: {1}\nАктивность: {2}",
-  "ActivityListItemTemplate": "{0}-{1}: {2}",
-  "InProgress": "Обрабатываю...",
-  "BtnConfirmActivity": "Сохранить",
-  "BtnCancelActivity": "Удалить",
-  "ChooseUtc": "Выберете ваш часовой пояс",
-  "UserChosenUtc": "Вы выбрали часовой пояс {0}.\nДля смены часового пояса введите команду /start",
-  "NoActivitiesToday": "Нет записей на сегодня",
-  "MinActivitiesCountForAiDailyRecommendation": 5,
-  "NotEnoughActivityForAiDailyRecommendation": "Для получения анализа ИИ необходимо добавить минимум {{MinActivitiesCountForAiDailyRecommendation}} записей",
-  "NoRecommendationsForDaily": "Нет рекомендаций",
   "AppResources": {
     "BalanceTypes": {
       "None": "Другое",
@@ -37,5 +19,26 @@
       "Education": "Обучение",
       "Relax": "Отдых"
     }
-  }
+  },
+  "Introduction" : "Привет, как дела",
+  "MainStateIntroduction" : "Записывайте голосовые сообщения с пометками о том, что делали в течении дня.\nНапример: 7:00 до 7:15 делал утреннюю зарядку.\nОбязательно указывайте время начала и окончания действия.",
+  "DontUnderstandYou": "Я понимаю только голосовые сообщения",
+  "TooLongVoice": "Слишком длинное голосовое, запишите по-короче)",
+  "CannotRecognizeTextInVoice": "Не могу распознать текст",
+  "NotFoundActivityInVoice": "Вот что вы сказали\n\n{0}\n\nНеобходимо по шаблону: С [время начала] до [время окончания] [что делали]",
+  "NotFoundActivityInText": "Необходимо ввести по шаблону: С [время начала] до [время окончания] [что делали]",
+  "ActivityTemplate": "Время начала: {0}\nВремя окончания: {1}\nАктивность: {2}",
+  "ActivityListItemTemplate": "{0}-{1}: {2}",
+  "InProgress": "Обрабатываю...",
+  "BtnConfirmActivity": "\uD83D\uDC4C Сохранить",
+  "BtnCancelActivity": "❌ Удалить",
+  "ChooseUtc": "Выберете ваш часовой пояс",
+  "UserChosenUtc": "Вы выбрали часовой пояс {0}.\nДля смены часового пояса введите команду /start",
+  "NoActivitiesToday": "Нет записей на сегодня",
+  "MinActivitiesCountForAiDailyRecommendation": 5,
+  "NotEnoughActivityForAiDailyRecommendation": "Для получения анализа ИИ необходимо добавить минимум {{MinActivitiesCountForAiDailyRecommendation}} записей",
+  "NoRecommendationsForDaily": "Нет рекомендаций",
+  "BtnBalanceContainsNameFormat": "✅ {0}",
+  "BtnBalanceNotContainsNameFormat": "{0}",
+  "BtnOpenBalanceTypes": "✏\uFE0F Cферы жизни"
 }

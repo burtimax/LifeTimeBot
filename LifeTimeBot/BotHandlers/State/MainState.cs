@@ -87,13 +87,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, GetUserUtc()!.Value, messageId: Update.Message.MessageId, messageText: text);
         await _activityService.SaveActivity(entity);
 
-        InlineKeyboardBuilder kb = new InlineKeyboardBuilder()
-            .NewRow()
-            .Add(R.BtnConfirmActivity, R.BtnConfirmActivityCallback(entity.Id))
-            .Add(R.BtnCancelActivity, R.BtnCancelActivityCallback(entity.Id));
-        
-        
-        await Answer(string.Format(R.ActivityTemplate, entity.StartTime.Value.ToString(AppConstants.DateTimeFormat), entity.EndTime.Value.ToString(AppConstants.DateTimeFormat), activity.Action), replyMarkup: kb.Build());
+        await SendActivityEntity(entity);
         return;
     }
     
@@ -161,16 +155,69 @@ public partial class MainState: BaseLifeTimeBotHandler
         int utc = User.AdditionalProperties.Get<int>(AppConstants.UserUtcPropKey);
         ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, utc, voice.FileId, Update.Message.MessageId, recognisedText);
         await _activityService.SaveActivity(entity);
-
-        InlineKeyboardBuilder kb = new InlineKeyboardBuilder()
-            .NewRow()
-            .Add(R.BtnConfirmActivity, R.BtnConfirmActivityCallback(entity.Id))
-            .Add(R.BtnCancelActivity, R.BtnCancelActivityCallback(entity.Id));
         
         await DeleteInProgress();
-        await Answer(string.Format(R.ActivityTemplate, entity.StartTime.Value.ToString(AppConstants.DateTimeFormat), entity.EndTime.Value.ToString(AppConstants.DateTimeFormat), activity.Action), replyMarkup: kb.Build());
+        await SendActivityEntity(entity);
         return;
     }
 
-    
+    public async Task SendActivityEntity(ActivityEntity entity, bool openBalanceTypes = false, int? messageId = null)
+    {
+        bool HasBalance(BalanceType bType) => entity.BalanceTypes.Contains(bType);
+
+        string text = string.Format(R.ActivityTemplate, entity.StartTime.Value.ToString(AppConstants.DateTimeFormat),
+            entity.EndTime.Value.ToString(AppConstants.DateTimeFormat), entity.Description);
+        
+        InlineKeyboardButton GetBtn(BalanceType bType)
+        {
+            string name = HasBalance(bType)
+                ? string.Format(R.BtnBalanceContainsNameFormat, R.AppResources.GetBalanceTypeName(bType))
+                : string.Format(R.BtnBalanceNotContainsNameFormat, R.AppResources.GetBalanceTypeName(bType));
+            string callback = HasBalance(bType)
+                ? R.RemoveBalanceTypeFromActivityCallback(entity.Id, bType)
+                : R.AddBalanceTypeToActivityCallback(entity.Id, bType);
+            return new InlineKeyboardButton(name)
+            {
+                CallbackData = callback
+            };
+        }
+        
+        InlineKeyboardBuilder kb = new InlineKeyboardBuilder();
+
+        if (openBalanceTypes)
+        {
+            kb.NewRow()
+                .Add(GetBtn(BalanceType.СareerWorkBusiness))
+                .Add(GetBtn(BalanceType.LoveFamilyChildren))
+                .NewRow()
+                .Add(GetBtn(BalanceType.HealthyAndSport))
+                .Add(GetBtn(BalanceType.FriendsAndCommunity))
+                .NewRow()
+                .Add(GetBtn(BalanceType.HobbyAndBrightnessOfLife))
+                .Add(GetBtn(BalanceType.PersonalDevelopmentAndEducation))
+                .NewRow()
+                .Add(GetBtn(BalanceType.Finance))
+                .Add(GetBtn(BalanceType.Spirituality));
+        }
+        else
+        {
+            kb.NewRow()
+                .Add(R.BtnOpenBalanceTypes, R.BtnOpenBalanceTypesKeyCallback(entity.Id));
+        }
+            
+        kb.NewRow()
+        .Add(R.BtnConfirmActivity, R.BtnConfirmActivityCallback(entity.Id))
+        .Add(R.BtnCancelActivity, R.BtnCancelActivityCallback(entity.Id));
+
+        if (messageId.HasValue)
+        {
+            try
+            {
+                await BotClient.EditMessageReplyMarkupAsync(Chat.ChatId, messageId.Value, replyMarkup: kb.Build());
+                return;
+            }catch (Exception e) { }
+        }
+        
+        await Answer(text, replyMarkup: kb.Build());
+    }
 }

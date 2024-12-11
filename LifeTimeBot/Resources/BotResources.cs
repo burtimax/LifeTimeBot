@@ -1,4 +1,5 @@
-﻿using LifeTimeBot.Resources.Nested;
+﻿using LifeTimeBot.Db.AppDb.Entities;
+using LifeTimeBot.Resources.Nested;
 
 namespace LifeTimeBot.Resources;
 
@@ -29,4 +30,13 @@ public partial class BotResources
     public int MinActivitiesCountForAiDailyRecommendation { get; set; }
     public string NotEnoughActivityForAiDailyRecommendation { get; set; }
     public string NoRecommendationsForDaily { get; set; }
+    public string AddBalanceTypeToActivityKey = "add_bal_t_ac:";
+    public string AddBalanceTypeToActivityCallback(long activityId, BalanceType type) => $"{AddBalanceTypeToActivityKey}{activityId}:{(int)type}";
+    public string RemoveBalanceTypeFromActivityKey = "rem_bal_t_ac:";
+    public string RemoveBalanceTypeFromActivityCallback(long activityId, BalanceType type) => $"{RemoveBalanceTypeFromActivityKey}{activityId}:{(int)type}";
+    public string BtnBalanceContainsNameFormat { get; set; }
+    public string BtnBalanceNotContainsNameFormat { get; set; }
+    public string BtnOpenBalanceTypes { get; set; }
+    public string BtnOpenBalanceTypesKey = "open_balance_types:";
+    public string BtnOpenBalanceTypesKeyCallback(long activityId) => $"{BtnOpenBalanceTypesKey}{activityId}";
 }

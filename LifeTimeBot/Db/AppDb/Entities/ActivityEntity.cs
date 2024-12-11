@@ -28,8 +28,9 @@ public class ActivityEntity : BaseEntity<long>
     public bool Confirmed { get; set; }
     [Comment("Тип активности.")]
     public ActivityType Type { get; set; }
+
     [Comment("Сферы жизненного баланса активности.")]
-    public List<BalanceType> BalanceTypes { get; set; }
+    public List<BalanceType> BalanceTypes { get; set; } = new();
 
     /// <summary>
     /// Длительность активности в минутах.
