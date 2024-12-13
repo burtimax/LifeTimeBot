@@ -126,7 +126,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         } 
         
         DownloadedTelegramFile telegramFile = await BotClient.DownloadFileAsync(voice.FileId);
-        var recognisedText =await asr.VoiceToText(telegramFile.FileData);
+        var recognisedText =await asr.WhisperVoiceToText(telegramFile.FileData);
         if (string.IsNullOrEmpty(recognisedText) == false)
         {
             mesRecognized = await Answer(recognisedText);

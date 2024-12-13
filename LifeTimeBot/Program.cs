@@ -1,6 +1,7 @@
 using System.Reflection;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using LifeTimeBot.App.Constants;
 using LifeTimeBot.App.Options;
 using LifeTimeBot.Db.AppDb;
 using LifeTimeBot.Extensions;
@@ -78,6 +79,11 @@ else
 {
     builder.Services.AddCors();
 }
+
+services.AddHttpClient(AppConstants.HttpClients.LlmClient, client =>
+    { client.BaseAddress = new Uri(config.LlmService.Url); });
+services.AddHttpClient(AppConstants.HttpClients.AsrClient, client =>
+    { client.BaseAddress = new Uri(config.AsrService.WhisperUrl); });
 
 services.AddMapster();
 

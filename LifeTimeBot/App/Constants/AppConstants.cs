@@ -5,6 +5,12 @@ public static partial class AppConstants
     public const string UserUtcPropKey = "utc_tz";
     public const string DateTimeFormat = "dd.MM.yyyy HH:mm";
     public const string TimeFormat = "HH:mm";
+
+    public static class HttpClients
+    {
+        public const string AsrClient = "asr_client";
+        public const string LlmClient = "llm_client";
+    }
     
     public static List<UTCLabel> UTCTimezones = new List<UTCLabel>()
     {

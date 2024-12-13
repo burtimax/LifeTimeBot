@@ -14,7 +14,7 @@ public partial class LlmService
     
     public LlmService(IOptions<AppOptions> options)
     {
-        _llmOptions = options.Value.LlmHuggingFaceService;
+        _llmOptions = options.Value.LlmService;
     }
 
 
