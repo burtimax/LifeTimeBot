@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using LifeTimeBot.Db.AppDb.Entities;
+using LifeTimeBot.Endpoints.Daily.GetDailyCalendarPositions;
 using LifeTimeBot.Extensions;
 
 namespace LifeTimeBot.Models;
@@ -21,14 +22,57 @@ public class ActivityModel
     [JsonPropertyName("balance")]
     public List<BalanceType> BalanceTypes { get; set; }
 
+    public bool HasErrors(out List<string> errors)
+    {
+        bool hasErrors = false;
+        errors = new();
 
+        if (HasTimeError(StartTime))
+        {
+            hasErrors = true;
+            errors.Add($"Время начала неправильное!");
+        }
+        
+        if (HasTimeError(EndTime))
+        {
+            hasErrors = true;
+            errors.Add($"Время окончания неправильное!");
+        }
+
+        if (string.IsNullOrEmpty(Action.Trim(' ')))
+        {
+            hasErrors = true;
+            errors.Add($"Укажите занятие!");
+        }
+        
+        return hasErrors;
+    }
+
+    private bool HasTimeError(string time)
+    {
+        int h = int.Parse(time.Split(":")[0]);
+        int m = int.Parse(time.Split(":")[1]);
+
+        if (h < 0 || h > 23) return true;
+        if (m < 0 || m > 59) return true;
+
+        return false;
+    }
+    
+    private string GetValidTime(string time)
+    {
+        if (HasTimeError(time)) return "00:00";
+        return time;
+    }
+    
     public ActivityEntity ToEntity(long botId, long chatId, int utc, string? fileId = null, int? messageId = null, string? messageText = null)
     {
         // Погрешность, если пользователь указал время окончания чуть больше текущего времени.
         int hoursError = 2;
         
-        DateTime startTime = DateTime.Parse(StartTime);
-        DateTime endTime = DateTime.Parse(EndTime);
+        DateTime startTime = DateTime.Parse(GetValidTime(StartTime));
+        DateTime endTime = DateTime.Parse(GetValidTime(EndTime));
+        if (endTime < startTime) (startTime, endTime) = (endTime, startTime);
         
         DateTime now = DateTime.UtcNow.AddHours(utc);
         startTime = new DateTime(now.Year, now.Month, now.Day, startTime.Hour, startTime.Minute, startTime.Second);

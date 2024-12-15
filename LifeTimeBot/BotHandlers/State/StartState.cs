@@ -30,11 +30,13 @@ public class StartState: BaseLifeTimeBotHandler
         var utc = AppConstants.UTCTimezones;
         InlineKeyboardBuilder kb = new InlineKeyboardBuilder();
         kb.NewRow().Add(utc[12].Title, R.BtnChooseUtcCallback(utc[12].Difference));
-        for (int i = 0; i < 12; i++)
+        for (int i = 0; i < 6; i++)
         {
             kb.NewRow()
-                .Add(utc[0+i].Title, R.BtnChooseUtcCallback(utc[0+i].Difference))
-                .Add(utc[13+i].Title, R.BtnChooseUtcCallback(utc[13+i].Difference));
+                //.Add(utc[0+i].Title, R.BtnChooseUtcCallback(utc[0+i].Difference))
+                //.Add(utc[6+i].Title, R.BtnChooseUtcCallback(utc[0+i].Difference))
+                .Add(utc[13+i].Title, R.BtnChooseUtcCallback(utc[13+i].Difference))
+                .Add(utc[19+i].Title, R.BtnChooseUtcCallback(utc[13+i].Difference));
         }
 
         await Answer(R.ChooseUtc, replyMarkup: kb.Build());

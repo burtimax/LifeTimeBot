@@ -39,4 +39,7 @@ public partial class BotResources
     public string BtnOpenBalanceTypes { get; set; }
     public string BtnOpenBalanceTypesKey = "open_balance_types:";
     public string BtnOpenBalanceTypesKeyCallback(long activityId) => $"{BtnOpenBalanceTypesKey}{activityId}";
+    public string HelpDescription { get; set; }
+    public string BtnHelp { get; set; }
+    public string HelpUrl { get; set; }
 }

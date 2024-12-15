@@ -83,10 +83,16 @@ public partial class MainState: BaseLifeTimeBotHandler
         }
         
         ActivityModel activity = resActivity.Activity;
+        if (activity.HasErrors(out _))
+        {
+            await Answer(string.Format(R.NotFoundActivityInText, text));
+            return;
+        }
         
         ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, GetUserUtc()!.Value, messageId: Update.Message.MessageId, messageText: text);
         await _activityService.SaveActivity(entity);
 
+        await DeleteInProgress();
         await SendActivityEntity(entity);
         return;
     }
@@ -151,7 +157,12 @@ public partial class MainState: BaseLifeTimeBotHandler
         
         // Есть активность.
         ActivityModel activity = resActivity.Activity;
-
+        if (activity.HasErrors(out _))
+        {
+            await Answer(string.Format(R.NotFoundActivityInText, recognisedText));
+            return;
+        }
+        
         int utc = User.AdditionalProperties.Get<int>(AppConstants.UserUtcPropKey);
         ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, utc, voice.FileId, Update.Message.MessageId, recognisedText);
         await _activityService.SaveActivity(entity);
@@ -165,8 +176,8 @@ public partial class MainState: BaseLifeTimeBotHandler
     {
         bool HasBalance(BalanceType bType) => entity.BalanceTypes.Contains(bType);
 
-        string text = string.Format(R.ActivityTemplate, entity.StartTime.Value.ToString(AppConstants.DateTimeFormat),
-            entity.EndTime.Value.ToString(AppConstants.DateTimeFormat), entity.Description);
+        string text = string.Format(R.ActivityTemplate, entity.StartTime.Value.ToString(AppConstants.TimeFormat),
+            entity.EndTime.Value.ToString(AppConstants.TimeFormat), entity.Description);
         
         InlineKeyboardButton GetBtn(BalanceType bType)
         {
