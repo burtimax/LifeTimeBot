@@ -15,6 +15,8 @@ public class ActivityModel
 
     [JsonPropertyName("action")]
     public string Action { get; set; }
+    [JsonPropertyName("emoji")]
+    public string Emoji { get; set; }
     
     [JsonPropertyName("type")]
     public ActivityType Type { get; set; }
@@ -53,7 +55,7 @@ public class ActivityModel
         int h = int.Parse(time.Split(":")[0]);
         int m = int.Parse(time.Split(":")[1]);
 
-        if (h < 0 || h > 23) return true;
+        if (h < 0 || h > 24) return true;
         if (m < 0 || m > 59) return true;
 
         return false;
@@ -61,8 +63,12 @@ public class ActivityModel
     
     private string GetValidTime(string time)
     {
+        int h = int.Parse(time.Split(":")[0]);
+        int m = int.Parse(time.Split(":")[1]);
+        if(h == 24) h = 0;
+        
         if (HasTimeError(time)) return "00:00";
-        return time;
+        return $"{h:00}:{m:00}";
     }
     
     public ActivityEntity ToEntity(long botId, long chatId, int utc, string? fileId = null, int? messageId = null, string? messageText = null)
@@ -72,7 +78,10 @@ public class ActivityModel
         
         DateTime startTime = DateTime.Parse(GetValidTime(StartTime));
         DateTime endTime = DateTime.Parse(GetValidTime(EndTime));
-        if (endTime < startTime) (startTime, endTime) = (endTime, startTime);
+        
+        // Нельзя менять время местами, потому что запись активности может происходить на перемене дат
+        // Например: С 23:00 до 01:00: Работа над приложением
+        // if (endTime < startTime) (startTime, endTime) = (endTime, startTime);
         
         DateTime now = DateTime.UtcNow.AddHours(utc);
         startTime = new DateTime(now.Year, now.Month, now.Day, startTime.Hour, startTime.Minute, startTime.Second);
@@ -114,6 +123,7 @@ public class ActivityModel
             MessageText = messageText,
             Type = this.Type,
             BalanceTypes = this.BalanceTypes,
+            Emoji = Emoji
         };
     }
 }

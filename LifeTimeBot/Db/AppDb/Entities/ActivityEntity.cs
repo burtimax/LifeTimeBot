@@ -16,6 +16,8 @@ public class ActivityEntity : BaseEntity<long>
     public DateTimeOffset? EndTime { get; set; }
     [Comment("Описание активности")]
     public string? Description { get; set; }
+    [Comment("Emoji активности")]
+    public string? Emoji { get; set; }
     [Comment("Комментарий к активности, подробности от пользователя.")]
     public string? Comment { get; set; }
     [Comment("FileId голосового")]

@@ -177,7 +177,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         bool HasBalance(BalanceType bType) => entity.BalanceTypes.Contains(bType);
 
         string text = string.Format(R.ActivityTemplate, entity.StartTime.Value.ToString(AppConstants.TimeFormat),
-            entity.EndTime.Value.ToString(AppConstants.TimeFormat), entity.Description);
+            entity.EndTime.Value.ToString(AppConstants.TimeFormat), entity.Description, entity.Emoji);
         
         InlineKeyboardButton GetBtn(BalanceType bType)
         {

@@ -41,7 +41,7 @@ public class TodayCommand : BaseLifeTimeBotHandler
         StringBuilder sb = new StringBuilder();
         foreach (var ac in activities)
         {
-            sb.AppendLine(string.Format(R.ActivityListItemTemplate, ac.StartTime.Value.ToString(AppConstants.TimeFormat), ac.EndTime.Value.ToString(AppConstants.TimeFormat), ac.Description));
+            sb.AppendLine(string.Format(R.ActivityListItemTemplate, ac.StartTime.Value.ToString(AppConstants.TimeFormat), ac.EndTime.Value.ToString(AppConstants.TimeFormat), ac.Description, ac.Emoji));
         }
 
         if (Chat.Data.Contains(lastTodayMes))
@@ -54,4 +54,6 @@ public class TodayCommand : BaseLifeTimeBotHandler
         Chat.Data.Set(lastTodayMes, mes.MessageId);
         await BotDbContext.SaveChangesAsync();
     }
+    
+    
 }
