@@ -93,7 +93,7 @@ sealed class GetDayActivityTypeReportEndpoint : Endpoint<GetDayActivityTypeRepor
             TotalMinutes = g.Sum(a => a.TotalMinutes)
         });
         
-        int max = typeMinutes.Max(a => a.TotalMinutes);
+        int max = typeMinutes != null && typeMinutes.Any() ? typeMinutes?.Max(a => a.TotalMinutes) ?? 0 : 0;
 
         if (max == 0) return typeScales;
 
