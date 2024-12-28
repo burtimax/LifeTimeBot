@@ -42,7 +42,7 @@ sealed class GetDailyEndpoint : Endpoint<GetDailyRequest, PagedList<ActivityEnti
     public override async Task HandleAsync(GetDailyRequest r, CancellationToken c)
     {
         var start = r.StartDate?.Date;
-        var end = r.EndDate?.AddDays(1).Date;
+        var end = r.EndDate;//r.EndDate?.AddDays(1).Date;
         List<ActivityEntity> activities = new();
 
         GetActivitiesDto dto = new()

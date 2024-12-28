@@ -55,10 +55,10 @@ public partial class AppDbContext
     {
         var entities = modelBuilder.Model
             .GetEntityTypes()
-            .Where(e => e.ClrType.BaseType == typeof(BaseEntity<Guid>))
+            .Where(e => e.ClrType.BaseType == typeof(BaseEntity<long>))
             .Select(e => e.ClrType);
         
-        Expression<Func<BaseEntity<Guid>, bool>> 
+        Expression<Func<BaseEntity<long>, bool>> 
             expression = del => del.DeletedAt == null;
 
         foreach (var e in entities)

@@ -41,16 +41,16 @@ sealed class DeleteDailyActivityEndpoint : Endpoint<DeleteDailyActivityRequest>
         {
             Ids = new List<long>(){ r.Id }
         };
-        var result = await _activityService.GetActivities(dto);
-        var res = (result)?.Data?.FirstOrDefault();
+        var activity = await _db.Activity.FirstOrDefaultAsync(a => a.Id == r.Id);
 
-        if (res == null)
+        if (activity == null)
         {
             await SendAsync(null);
             return;
         }
         
-        _db.Entry(res).State = EntityState.Deleted;
+        //_db.Entry(res).State = EntityState.Deleted;
+        _db.Activity.Remove(activity);
         await _db.SaveChangesAsync();
         await SendAsync(null);
     }
