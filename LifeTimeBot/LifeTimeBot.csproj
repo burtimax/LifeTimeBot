@@ -36,7 +36,6 @@
     <ItemGroup>
       <Folder Include="BotHandlers\UpdateType\" />
       <Folder Include="Db\AppDb\MIgrations\" />
-      <Folder Include="Endpoints\Ai\" />
     </ItemGroup>
 
 </Project>

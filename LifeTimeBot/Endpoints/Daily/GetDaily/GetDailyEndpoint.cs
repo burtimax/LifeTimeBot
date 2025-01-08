@@ -41,8 +41,9 @@ sealed class GetDailyEndpoint : Endpoint<GetDailyRequest, PagedList<ActivityEnti
 
     public override async Task HandleAsync(GetDailyRequest r, CancellationToken c)
     {
-        var start = r.StartDate?.Date;
-        var end = r.EndDate;//r.EndDate?.AddDays(1).Date;
+        var start = r.StartDate is null ? DateTime.MinValue : new DateTime(r.StartDate.Value.Year, r.StartDate.Value.Month, r.StartDate.Value.Day, r.StartDate.Value.Hour,r.StartDate.Value.Minute,r.StartDate.Value.Second);
+        var end = r.EndDate is null ? DateTime.MaxValue : new DateTime(r.EndDate.Value.Year, r.EndDate.Value.Month, r.EndDate.Value.Day, r.EndDate.Value.Hour,r.EndDate.Value.Minute,r.EndDate.Value.Second);
+        
         List<ActivityEntity> activities = new();
 
         GetActivitiesDto dto = new()

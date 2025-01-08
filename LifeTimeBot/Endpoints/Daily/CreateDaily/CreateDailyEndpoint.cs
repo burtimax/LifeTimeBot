@@ -47,10 +47,9 @@ sealed class CreateDailyEndpoint : Endpoint<CreateDailyRequest, ActivityEntity>
 
     public override async Task HandleAsync(CreateDailyRequest r, CancellationToken c)
     {
-        if (r.EndTime <= r.StartTime)
+        if (r.EndTime < r.StartTime)
         {
-            await SendAsync(null, 500);
-            return;
+            (r.EndTime, r.StartTime) = (r.StartTime, r.EndTime);
         }
         
         ActivityEntity? activity = new ActivityEntity()

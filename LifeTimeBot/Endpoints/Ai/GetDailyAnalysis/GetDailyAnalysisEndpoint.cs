@@ -13,7 +13,7 @@ sealed class GetDailyAnalysisRequest
 {
     public long BotId { get; set; }
     public long ChatId { get; set; }
-    public DateTime Date { get; set; }
+    public DateTimeOffset Date { get; set; }
 }
 
 sealed class GetDailyAnalysisResponse 
@@ -53,7 +53,7 @@ sealed class GetDailyAnalysisEndpoint : Endpoint<GetDailyAnalysisRequest, GetDai
 
     public override async Task HandleAsync(GetDailyAnalysisRequest r, CancellationToken c)
     {
-        var start = r.Date.Date;
+        var start = new DateTime(r.Date.Year, r.Date.Month, r.Date.Day, 0,0,0);
         var end = r.Date.AddDays(1).Date;
 
         GetActivitiesDto dto = new()

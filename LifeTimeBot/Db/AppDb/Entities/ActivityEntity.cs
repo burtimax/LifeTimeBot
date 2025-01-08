@@ -11,9 +11,9 @@ public class ActivityEntity : BaseEntity<long>
     [Comment("ИД чата, владельца активности")]
     public long TelegramChatId { get; set; }
     [Comment("Время начала активности")]
-    public DateTimeOffset? StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
     [Comment("Время окончания активности")]
-    public DateTimeOffset? EndTime { get; set; }
+    public DateTime? EndTime { get; set; }
     [Comment("Описание активности")]
     public string? Description { get; set; }
     [Comment("Emoji активности")]

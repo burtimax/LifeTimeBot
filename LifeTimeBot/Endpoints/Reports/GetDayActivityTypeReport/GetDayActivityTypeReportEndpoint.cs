@@ -101,7 +101,16 @@ sealed class GetDayActivityTypeReportEndpoint : Endpoint<GetDayActivityTypeRepor
         {
             typeScales[typeMinute.Type] = Convert.ToInt32(Math.Round((1.0 * typeMinute.TotalMinutes / max) * 100));
         }
-
+        
+        // преобразовать в относительный формат.
+        float maximum = typeScales
+            .Where(t => t.Key != "1")// исключаем активность сна.
+            .Max(t => t.Value);
+        foreach (var typeMinute in typeMinutes)
+        {
+            typeScales[typeMinute.Type] = Convert.ToInt32(typeScales[typeMinute.Type] / maximum * 100);
+        }
+        
         return typeScales;
     }
     

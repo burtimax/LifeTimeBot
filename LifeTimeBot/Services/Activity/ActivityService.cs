@@ -96,12 +96,8 @@ public class ActivityService
             {
                 var a = res.Data[i];
                 
-                var start = dto.Start ?? DateTimeOffset.MinValue;
-                var end = dto.End ?? DateTimeOffset.MaxValue;
-                if(a.StartTime is not null)
-                    a.StartTime = a.StartTime.Value.AddHours(-1 * a.StartTime.Value.Offset.TotalHours);
-                if(a.EndTime is not null)
-                    a.EndTime = a.EndTime.Value.AddHours(-1 * a.EndTime.Value.Offset.TotalHours);
+                var start = dto.Start ?? DateTime.MinValue;
+                var end = dto.End ?? DateTime.MaxValue;
                 
                 if(a.StartTime is not null && a.StartTime < start) a.StartTime = start;
                 if(a.EndTime is not null && a.EndTime > end) a.EndTime = end;
