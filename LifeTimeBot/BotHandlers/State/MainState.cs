@@ -5,6 +5,7 @@ using LifeTimeBot.Models;
 using LifeTimeBot.Services;
 using LifeTimeBot.Services.ASR;
 using LifeTimeBot.Services.LLM;
+using LifeTimeBot.Services.LLM.Dto;
 using MultipleBotFramework.Dispatcher.HandlerResolvers;
 using MultipleBotFramework.Enums;
 using MultipleBotFramework.Extensions;
@@ -71,7 +72,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         } 
         
         string text = message.Text;
-        var resActivity = await llm.GetActivityDataFromText(text);
+        LlmActivityDataResult resActivity = await GetActivityFromText(text);
         
         // ИИ не распознала активность
         if (resActivity.Activity is null)
@@ -132,7 +133,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         } 
         
         DownloadedTelegramFile telegramFile = await BotClient.DownloadFileAsync(voice.FileId);
-        var recognisedText =await asr.WhisperVoiceToText(telegramFile.FileData);
+        var recognisedText = await RecognizeTextFromVoice(telegramFile.FileData);
         if (string.IsNullOrEmpty(recognisedText) == false)
         {
             mesRecognized = await Answer(recognisedText);
@@ -144,7 +145,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         }
 
         //string text = "погладить кошечку 1200 1345";
-        var resActivity = await llm.GetActivityDataFromText(recognisedText);
+        var resActivity = await GetActivityFromText(recognisedText);
         
         // ИИ не распознала активность
         if (resActivity.Activity is null)
@@ -172,6 +173,32 @@ public partial class MainState: BaseLifeTimeBotHandler
         return;
     }
 
+    private async Task<LlmActivityDataResult> GetActivityFromText(string text)
+    {
+        try
+        {
+            return await llm.GetActivityDataFromText(text);
+        }
+        catch (Exception e)
+        {
+            await Answer(R.NotFoundActivityInText);
+            throw;
+        }
+    }
+    
+    private async Task<string?> RecognizeTextFromVoice(byte[] voiceData)
+    {
+        try
+        {
+            return await asr.WhisperVoiceToText(voiceData);
+        }
+        catch (Exception e)
+        {
+            await Answer(R.BotExceptions.CannotRecognizeTextFromAudio);
+            throw;
+        }
+    }
+    
     public async Task SendActivityEntity(ActivityEntity entity, bool openBalanceTypes = false, int? messageId = null)
     {
         bool HasBalance(BalanceType bType) => entity.BalanceTypes.Contains(bType);

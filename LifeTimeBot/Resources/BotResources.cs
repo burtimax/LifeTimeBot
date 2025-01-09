@@ -6,6 +6,7 @@ namespace LifeTimeBot.Resources;
 public partial class BotResources
 {
     public AppResources AppResources { get; set; }
+    public BotExceptions BotExceptions { get; set; }
     public string Introduction { get; set; }
     public string MainStateIntroduction { get; set; }
     public string DontUnderstandYou { get; set; }

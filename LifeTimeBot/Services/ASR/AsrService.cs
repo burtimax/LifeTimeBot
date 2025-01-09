@@ -40,34 +40,42 @@ public class AsrService
     
     public async Task<string?> WhisperVoiceToText(byte[] bytes)
     {
-        try
+        int tryCount = 5;
+        for (int i = 0; i < tryCount; i++)
         {
-            whisperClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_asrOptions.WhisperToken}");
-
-            using (var content = new ByteArrayContent(bytes))
+            try
             {
-                content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("audio/ogg");
-                
-                HttpResponseMessage response = await whisperClient.PostAsync(_asrOptions.WhisperUrl, content);
+                whisperClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_asrOptions.WhisperToken}");
 
-                if (response.IsSuccessStatusCode)
+                using (var content = new ByteArrayContent(bytes))
                 {
-                    string result = await response.Content.ReadAsStringAsync();
-                    AsrResultDto? asrResult = JsonConvert.DeserializeObject<AsrResultDto>(result);
-                    return asrResult?.Text;
-                }
-                else
-                {
-                    Console.WriteLine($"Ошибка: {response.StatusCode}");
-                    string errorDetails = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errorDetails);
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("audio/ogg");
+                
+                    HttpResponseMessage response = await whisperClient.PostAsync(_asrOptions.WhisperUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string result = await response.Content.ReadAsStringAsync();
+                        AsrResultDto? asrResult = JsonConvert.DeserializeObject<AsrResultDto>(result);
+                        return asrResult?.Text;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Ошибка: {response.StatusCode}");
+                        string errorDetails = await response.Content.ReadAsStringAsync();
+                        throw new Exception(errorDetails);
+                    }
                 }
             }
-            
+            catch (Exception ex)
+            {
+                if(i == tryCount - 1)
+                    throw;
+                await Task.Delay(i * 1000);
+                // иначе игнорируем ошибку и пробуем снова.
+            }
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
+
+        return null;
     }
 }
