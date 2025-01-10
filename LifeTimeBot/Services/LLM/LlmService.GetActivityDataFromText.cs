@@ -24,9 +24,10 @@ public partial class LlmService
         
         foreach (var ac in activitiesStr)
         {
-            if (ac.Trim(' ', '\n').StartsWith("{"))
+            string a = ac.Trim(' ', '\n', '[', ']', '.', ',');
+            if (a.StartsWith("{"))
             {
-                activities.Add(JsonSerializer.Deserialize<ActivityModel>(ac));
+                activities.Add(JsonSerializer.Deserialize<ActivityModel>(a));
             }
         }
         

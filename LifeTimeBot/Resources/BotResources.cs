@@ -43,4 +43,9 @@ public partial class BotResources
     public string HelpDescription { get; set; }
     public string BtnHelp { get; set; }
     public string HelpUrl { get; set; }
+    public string ActivityWasSaved { get; set; }
+    public string ActivityWasDeleted { get; set; }
+    public string BtnShowActivityListFor24Hours { get; set; }
+    public string BtnShowActivityListFor24HoursCallbackKey = "show_activities_for_24_hours";
+    public string ActivityListFor24Hours { get; set; }
 }

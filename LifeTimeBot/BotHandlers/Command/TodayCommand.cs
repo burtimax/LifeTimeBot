@@ -39,6 +39,7 @@ public class TodayCommand : BaseLifeTimeBotHandler
         }
         
         StringBuilder sb = new StringBuilder();
+        sb.AppendLine(R.ActivityListFor24Hours);
         foreach (var ac in activities)
         {
             sb.AppendLine(string.Format(R.ActivityListItemTemplate, ac.StartTime.Value.ToString(AppConstants.TimeFormat), ac.EndTime.Value.ToString(AppConstants.TimeFormat), ac.Description, ac.Emoji));

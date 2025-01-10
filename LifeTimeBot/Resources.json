@@ -47,5 +47,9 @@
   "BtnOpenBalanceTypes": "✏\uFE0F Cферы жизни",
   "HelpDescription": "\uD83D\uDC49 Записывайте голосовые или текстовые сообщения с активностями вашего дня.\n\n✅ ”Смотрел фильм - с 17:00 до 18:30”\n✅ ”Гулял с друзьями - с 20:00 до 22:30”\n\nВажно! Указывайте время окончания занятия\n\n❌ ”Ходил на свидание”\n❌ ”Читал книгу с 17 вечера”\n\n\uD83D\uDC49 Поменять часовой пояс: Жмите команду /start\n\n\uD83D\uDC49 Не работает бот или приложение: Сообщите @burtimax\n\n\uD83D\uDC49 По всем вопросам, идеям и предложениям: Обратитесь в чат поддержки @burtimax",
   "BtnHelp": "FAQ",
-  "HelpUrl": "https://teletype.in/@burtimax/track-day-help"
+  "HelpUrl": "https://teletype.in/@burtimax/track-day-help",
+  "ActivityWasSaved": "Активность сохранена ✅",
+  "ActivityWasDeleted": "Активность удалена ❌",
+  "BtnShowActivityListFor24Hours": "Показать активности за 24 часа",
+  "ActivityListFor24Hours": "<b>Активности за последние 24 часа</b>"
 }

@@ -184,7 +184,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         try
         {
             var ac24 = await _activityService.Get24HoursActivities(BotId, Chat.ChatId, GetUserUtc()!.Value);
-            string lastUserActivityTime = ac24?.LastOrDefault()?.EndTime?.ToString($"hh:mm") ?? "00:00";
+            string lastUserActivityTime = ac24?.LastOrDefault()?.EndTime != null ? $"{ac24.Last().EndTime!.Value.Hour}:{ac24.Last().EndTime!.Value.Minute}" : "00:00";
             
             return await llm.GetActivityDataFromText(text, lastUserActivityTime);
         }

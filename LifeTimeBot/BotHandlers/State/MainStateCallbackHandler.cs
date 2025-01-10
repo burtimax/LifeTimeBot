@@ -7,7 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using MultipleBotFramework.Dispatcher.HandlerResolvers;
 using MultipleBotFramework.Enums;
 using MultipleBotFramework.Extensions;
+using MultipleBotFramework.Utils.Keyboard;
+using Telegram.BotAPI.AvailableMethods;
 using Telegram.BotAPI.AvailableTypes;
+using Telegram.BotAPI.UpdatingMessages;
 
 namespace LifeTimeBot.BotHandlers.State;
 
@@ -27,14 +30,16 @@ public class MainStateCallbackHandler: BaseLifeTimeBotHandler
     public override async Task HandleCallbackQuery(CallbackQuery callbackQuery)
     {
         string data = callbackQuery.Data!.ToString();
+        int messageId = callbackQuery.Message?.MessageId ?? throw new Exception("MessageId is null");
         await AnswerCallback();
         
         if (data.StartsWith(R.BtnConfirmActivityKey))
         {
             long activityId = long.Parse(data.Replace(R.BtnConfirmActivityKey, ""));
             await _activityService.ConfirmActivity(activityId);
-            await DeleteMessage(callbackQuery.Message?.MessageId);
-            await SendTodayList();
+            await ChangeActivityMessage(messageId, true);
+            //await DeleteMessage(callbackQuery.Message?.MessageId);
+            //await SendTodayList();
             return;
         }
 
@@ -42,8 +47,9 @@ public class MainStateCallbackHandler: BaseLifeTimeBotHandler
         {
             long activityId = long.Parse(data.Replace(R.BtnCancelActivityKey, ""));
             await _activityService.CancelActivity(activityId);
-            await DeleteMessage(callbackQuery.Message?.MessageId);
-            await SendTodayList();
+            await ChangeActivityMessage(messageId, true);
+            //await DeleteMessage(callbackQuery.Message?.MessageId);
+            //await SendTodayList();
             return;
         }
         
@@ -84,10 +90,34 @@ public class MainStateCallbackHandler: BaseLifeTimeBotHandler
                 callbackQuery.Message.MessageId);
             return;
         }
+        
+        if (data.StartsWith(R.BtnShowActivityListFor24HoursCallbackKey))
+        {
+            await SendTodayList();
+            return;
+        }
     }
 
     private async Task SendTodayList()
     {
         await this.HandleBotRequest<TodayCommand>();
+    }
+
+    private async Task ChangeActivityMessage(int messageId, bool activitySaved)
+    {
+        string text = activitySaved ? R.ActivityWasSaved : R.ActivityWasDeleted;
+
+        InlineKeyboardBuilder kb = new();
+        kb.NewRow().Add(R.BtnShowActivityListFor24Hours, R.BtnShowActivityListFor24HoursCallbackKey);
+
+        try
+        {
+            await BotClient.EditMessageTextAsync(Chat.ChatId, messageId, text: text, replyMarkup: kb.Build());
+        }
+        catch (Exception e)
+        {
+            await BotClient.SendMessageAsync(Chat.ChatId, text: text, replyMarkup: kb.Build());
+        }
+        
     }
 }
