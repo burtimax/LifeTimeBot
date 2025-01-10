@@ -4,6 +4,7 @@ using LifeTimeBot.Db.AppDb.Entities;
 using LifeTimeBot.Models;
 using LifeTimeBot.Services;
 using LifeTimeBot.Services.ASR;
+using LifeTimeBot.Services.Dto;
 using LifeTimeBot.Services.LLM;
 using LifeTimeBot.Services.LLM.Dto;
 using MultipleBotFramework.Dispatcher.HandlerResolvers;
@@ -75,26 +76,29 @@ public partial class MainState: BaseLifeTimeBotHandler
         LlmActivityDataResult resActivity = await GetActivityFromText(text);
         
         // ИИ не распознала активность
-        if (resActivity.Activity is null)
+        if (resActivity.Activities is null || resActivity.Activities.Any() == false)
         {
             // написать пользователю как стоит оформить сообщение.
             await DeleteInProgress();
             await Answer(string.Format(R.NotFoundActivityInText, text));
             return;
         }
-        
-        ActivityModel activity = resActivity.Activity;
-        if (activity.HasErrors(out _))
+
+        foreach (var activity in resActivity.Activities)
         {
-            await Answer(string.Format(R.NotFoundActivityInText, text));
-            return;
+            if (activity.HasErrors(out _))
+            {
+                await Answer(string.Format(R.NotFoundActivityInText, text));
+                return;
+            }
+        
+            ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, GetUserUtc()!.Value, messageId: Update.Message.MessageId, messageText: text);
+            await _activityService.SaveActivity(entity);
+
+            await DeleteInProgress();
+            await SendActivityEntity(entity);
         }
         
-        ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, GetUserUtc()!.Value, messageId: Update.Message.MessageId, messageText: text);
-        await _activityService.SaveActivity(entity);
-
-        await DeleteInProgress();
-        await SendActivityEntity(entity);
         return;
     }
     
@@ -148,7 +152,7 @@ public partial class MainState: BaseLifeTimeBotHandler
         var resActivity = await GetActivityFromText(recognisedText);
         
         // ИИ не распознала активность
-        if (resActivity.Activity is null)
+        if (resActivity.Activities is null || resActivity.Activities.Any() == false)
         {
             // написать пользователю как стоит оформить сообщение и вывести, что нейронка услышала.
             await DeleteInProgress();
@@ -156,20 +160,22 @@ public partial class MainState: BaseLifeTimeBotHandler
             return;
         }
         
-        // Есть активность.
-        ActivityModel activity = resActivity.Activity;
-        if (activity.HasErrors(out _))
+        // Есть активности.
+        foreach (var activity in resActivity.Activities)
         {
-            await Answer(string.Format(R.NotFoundActivityInText, recognisedText));
-            return;
+            if (activity.HasErrors(out _))
+            {
+                await Answer(string.Format(R.NotFoundActivityInText, recognisedText));
+                return;
+            }
+        
+            ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, GetUserUtc()!.Value, voice.FileId, Update.Message.MessageId, recognisedText);
+            await _activityService.SaveActivity(entity);
+        
+            await DeleteInProgress();
+            await SendActivityEntity(entity);
         }
         
-        int utc = User.AdditionalProperties.Get<int>(AppConstants.UserUtcPropKey);
-        ActivityEntity entity = activity.ToEntity(BotId, Chat.ChatId, utc, voice.FileId, Update.Message.MessageId, recognisedText);
-        await _activityService.SaveActivity(entity);
-        
-        await DeleteInProgress();
-        await SendActivityEntity(entity);
         return;
     }
 
@@ -177,7 +183,10 @@ public partial class MainState: BaseLifeTimeBotHandler
     {
         try
         {
-            return await llm.GetActivityDataFromText(text);
+            var ac24 = await _activityService.Get24HoursActivities(BotId, Chat.ChatId, GetUserUtc()!.Value);
+            string lastUserActivityTime = ac24?.LastOrDefault()?.EndTime?.ToString($"hh:mm") ?? "00:00";
+            
+            return await llm.GetActivityDataFromText(text, lastUserActivityTime);
         }
         catch (Exception e)
         {

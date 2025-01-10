@@ -4,6 +4,6 @@ namespace LifeTimeBot.Services.LLM.Dto;
 
 public class LlmActivityDataResult
 {
-    public ActivityModel? Activity { get; set; }
+    public List<ActivityModel>? Activities { get; set; }
     public string LlmResponse { get; set; }
 }
