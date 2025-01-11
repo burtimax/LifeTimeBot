@@ -47,7 +47,7 @@ public class MainStateCallbackHandler: BaseLifeTimeBotHandler
         {
             long activityId = long.Parse(data.Replace(R.BtnCancelActivityKey, ""));
             await _activityService.CancelActivity(activityId);
-            await ChangeActivityMessage(messageId, true);
+            await ChangeActivityMessage(messageId, false);
             //await DeleteMessage(callbackQuery.Message?.MessageId);
             //await SendTodayList();
             return;
