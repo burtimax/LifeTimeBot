@@ -16,7 +16,7 @@ public partial class LlmService
     public async Task<LlmActivityDataResult> GetActivityDataFromText(string text, string lastActivityTimeStr = null)
     {
         string prompt = _llmOptions.GetActivityPromptTemplate.Replace("{last_end_time}", lastActivityTimeStr);
-        string answer = await GetAnswerFromLLM(prompt, text);
+        string answer = await GetAnswerFromLLM2(prompt, text);
 
         List<string> activitiesStr = answer.Replace("},", "}|").Split('|').ToList();
 

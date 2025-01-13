@@ -105,7 +105,7 @@ public partial class MainState: BaseLifeTimeBotHandler
     private async Task HandleVoiceMessage(Message message)
     {
         var voice = message.Voice;
-        if (voice.Duration > 20)
+        if (voice.Duration > 30)
         {
             await Answer(R.TooLongVoice);
             return;

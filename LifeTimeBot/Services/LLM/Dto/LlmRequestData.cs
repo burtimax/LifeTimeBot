@@ -18,6 +18,8 @@ public class LlmRequestData
 
     [JsonPropertyName("top_p")]
     public double TopP { get; set; }
+    [JsonPropertyName("stream")]
+    public bool Stream { get; set; }
 }
 
 public class LlmMessageItem

@@ -4,6 +4,7 @@ using System.Text.Json;
 using LifeTimeBot.App.Options;
 using LifeTimeBot.Services.LLM.Dto;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 
 namespace LifeTimeBot.Services.LLM;
 
@@ -65,6 +66,64 @@ public partial class LlmService
                 {
                     return response.Choices.FirstOrDefault().Message?.Content ?? null;
                 }
+            }
+            catch (Exception e) //when(e.Message == "The SSL connection could not be established, see inner exception.")
+            {
+                if(i == tryCount - 1) throw;
+                await Task.Delay(i * 1000);
+            }
+        }
+        
+        return null;
+    }
+    
+    
+    public async Task<string> GetAnswerFromLLM2(string prompt, string userText)
+    {
+        int tryCount = 5;
+        for (int i = 0; i < tryCount; i++)
+        {
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, _llmOptions.Url);
+                request.Headers.Add("accept", "*/*");
+                request.Headers.Add("accept-language", "ru-RU,ru;q=0.9,en-US;q=0.7,en;q=0.7");
+                request.Headers.Add("authorization", $"Bearer {_llmOptions.ApiKey}");
+                // request.Headers.Add("content-type", "application/json");
+                // request.Headers.Add("user-agent", "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36");
+
+                LlmRequestData requestData = new()
+                {
+                    Model = _llmOptions.Model,
+                    Temperature = _llmOptions.Temperature,
+                    MaxTokens = _llmOptions.MaxTokens,
+                    TopP = _llmOptions.TopP,
+                    Stream = false
+                };
+
+                requestData.Messages = new()
+                {
+                    new()
+                    {
+                        Role = "system",
+                        Content = prompt
+                    },
+                    new()
+                    {
+                        Role = "user",
+                        Content = userText
+                    }
+                };
+
+                string json = JsonSerializer.Serialize(requestData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                request.Content = content;
+                var responseData = await client.SendAsync(request);
+                responseData.EnsureSuccessStatusCode();
+                string responseJson = await responseData.Content.ReadAsStringAsync();
+                JObject jsonObject = JObject.Parse(responseJson);
+                string text = jsonObject["output"]["choices"]?[0]?["text"]?.ToString();
+                return text;
             }
             catch (Exception e) //when(e.Message == "The SSL connection could not be established, see inner exception.")
             {

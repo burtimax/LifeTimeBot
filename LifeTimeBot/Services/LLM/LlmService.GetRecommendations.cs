@@ -17,7 +17,7 @@ public partial class LlmService
     /// <returns></returns>
     public async Task<string?> GetRecommendationsForRoutine(string dailyRoutine)
     {
-        string answer = await GetAnswerFromLLM(_llmOptions.GetRecommendationsForRoutinePromptTemplate, dailyRoutine);
+        string answer = await GetAnswerFromLLM2(_llmOptions.GetRecommendationsForRoutinePromptTemplate, dailyRoutine);
         return answer;
     }
     
