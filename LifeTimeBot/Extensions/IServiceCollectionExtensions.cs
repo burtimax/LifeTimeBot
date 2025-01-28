@@ -1,9 +1,13 @@
 ﻿using System.Reflection;
 using LifeTimeBot.App.Options;
+using LifeTimeBot.Db.AppDb.Entities;
+using LifeTimeBot.Db.AppDb.Entities.Notifications;
 using LifeTimeBot.Resources;
 using LifeTimeBot.Services;
 using LifeTimeBot.Services.ASR;
 using LifeTimeBot.Services.LLM;
+using LifeTimeBot.Services.UserTask;
+using LifeTimeBot.Services.UserTaskNotification;
 using Mapster;
 using MapsterMapper;
 using MultipleBotFramework.Db.Entity;
@@ -67,5 +71,7 @@ public static class IServiceCollectionExtensions
         services.AddScoped<LlmService>();
         services.AddScoped<ActivityService>();
         services.AddScoped<UserUtcService>();
+        services.AddScoped<UserTaskService>();
+        services.AddScoped<UserTaskNotificationService>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LifeTimeBot.Db.AppDb.Entities;
+using LifeTimeBot.Db.AppDb.Entities.Notifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace LifeTimeBot.Db.AppDb;
@@ -27,7 +28,9 @@ public partial class AppDbContext : DbContext
     }
     
     // Коллекции данных
-    public DbSet<ActivityEntity> Activity => Set<ActivityEntity>();
+    public DbSet<ActivityEntity> Activities => Set<ActivityEntity>();
+    public DbSet<UserTaskEntity> UserTasks => Set<UserTaskEntity>();
+    public DbSet<UserTaskNotificationEntity> UserTaskNotifications => Set<UserTaskNotificationEntity>();
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

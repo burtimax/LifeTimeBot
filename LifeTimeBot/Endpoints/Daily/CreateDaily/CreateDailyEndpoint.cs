@@ -65,7 +65,7 @@ sealed class CreateDailyEndpoint : Endpoint<CreateDailyRequest, ActivityEntity>
             TelegramChatId = r.ChatId
         };
 
-        _db.Activity.Add(activity);
+        _db.Activities.Add(activity);
         await _db.SaveChangesAsync();
         await SendAsync(activity);
     }

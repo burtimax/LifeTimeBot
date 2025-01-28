@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using LifeTimeBot.Db.AppDb.Entities;
+using LifeTimeBot.Db.AppDb.Entities.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
@@ -45,6 +46,8 @@ public partial class AppDbContext
         // Определение сущностей по схемам.
         
         builder.Entity<ActivityEntity>().ToTable("activities", AppDbContext.appSchema);
+        builder.Entity<UserTaskEntity>().ToTable("user_tasks", AppDbContext.appSchema);
+        builder.Entity<UserTaskNotificationEntity>().ToTable("user_task_notifications", AppDbContext.appSchema);
         
     }
     
@@ -55,7 +58,8 @@ public partial class AppDbContext
     {
         var entities = modelBuilder.Model
             .GetEntityTypes()
-            .Where(e => e.ClrType.BaseType == typeof(BaseEntity<long>))
+            .Where(e => e.ClrType.BaseType == typeof(BaseEntity<long>)
+            || e.ClrType.BaseType == typeof(BaseNotification))
             .Select(e => e.ClrType);
         
         Expression<Func<BaseEntity<long>, bool>> 

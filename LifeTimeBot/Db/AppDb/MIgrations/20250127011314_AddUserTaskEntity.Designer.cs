@@ -3,6 +3,7 @@ using System;
 using LifeTimeBot.Db.AppDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LifeTimeBot.Db.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250127011314_AddUserTaskEntity")]
+    partial class AddUserTaskEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,90 +139,6 @@ namespace LifeTimeBot.Db.AppDb.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LifeTimeBot.Db.AppDb.Entities.Notifications.UserTaskNotificationEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id")
-                        .HasComment("ИД сущности.");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("BotId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("bot_id")
-                        .HasComment("Идентификатор бота");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at")
-                        .HasComment("Когда сущность была создана.");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text")
-                        .HasColumnName("created_by")
-                        .HasComment("Кто создал сущность.");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at")
-                        .HasComment("Когда сущность была удалена.");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text")
-                        .HasColumnName("deleted_by")
-                        .HasComment("Кто удалил сущность.");
-
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_enabled")
-                        .HasComment("Флаг активности уведомления");
-
-                    b.Property<DateTime>("NotificationDateTime")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("notification_date_time")
-                        .HasComment("Дата и время уведомления");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status")
-                        .HasComment("Статус уведомления");
-
-                    b.Property<long>("TelegramChatId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("telegram_chat_id")
-                        .HasComment("Идентификатор чата в Telegram");
-
-                    b.Property<DateTimeOffset?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at")
-                        .HasComment("Когда сущность была в последний раз обновлена.");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text")
-                        .HasColumnName("updated_by")
-                        .HasComment("Кто обновил сущность.");
-
-                    b.Property<long>("UserTaskId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("user_task_id")
-                        .HasComment("Внешний ключ на задачу пользователя");
-
-                    b.Property<int>("Utc")
-                        .HasColumnType("integer")
-                        .HasColumnName("utc")
-                        .HasComment("Часовой пояс в формате UTC");
-
-                    b.HasKey("Id")
-                        .HasName("pk_user_task_notifications");
-
-                    b.HasIndex("UserTaskId")
-                        .HasDatabaseName("ix_user_task_notifications_user_task_id");
-
-                    b.ToTable("user_task_notifications", "app");
-                });
-
             modelBuilder.Entity("LifeTimeBot.Db.AppDb.Entities.UserTaskEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -327,23 +246,6 @@ namespace LifeTimeBot.Db.AppDb.Migrations
                         {
                             t.HasComment("Задачи пользователей");
                         });
-                });
-
-            modelBuilder.Entity("LifeTimeBot.Db.AppDb.Entities.Notifications.UserTaskNotificationEntity", b =>
-                {
-                    b.HasOne("LifeTimeBot.Db.AppDb.Entities.UserTaskEntity", "UserTask")
-                        .WithMany("TaskNotifications")
-                        .HasForeignKey("UserTaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_user_task_notifications_user_tasks_user_task_id");
-
-                    b.Navigation("UserTask");
-                });
-
-            modelBuilder.Entity("LifeTimeBot.Db.AppDb.Entities.UserTaskEntity", b =>
-                {
-                    b.Navigation("TaskNotifications");
                 });
 #pragma warning restore 612, 618
         }

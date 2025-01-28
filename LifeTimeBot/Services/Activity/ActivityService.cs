@@ -20,7 +20,7 @@ public class ActivityService
 
     public async Task<ActivityEntity?> SaveActivity(ActivityEntity activity)
     {
-        _db.Activity.Add(activity);
+        _db.Activities.Add(activity);
         await _db.SaveChangesAsync();
         return activity;
     }
@@ -31,7 +31,7 @@ public class ActivityService
         if (activity == null) return null;
         
         activity.Confirmed = true;
-        _db.Activity.Update(activity);
+        _db.Activities.Update(activity);
         await _db.SaveChangesAsync();
         return activity;
     }
@@ -42,14 +42,14 @@ public class ActivityService
         if (activity == null) return null;
         
         activity.Confirmed = false;
-        _db.Activity.Update(activity);
+        _db.Activities.Update(activity);
         await _db.SaveChangesAsync();
         return activity;
     }
 
     public async Task<ActivityEntity?> GetActivityById(long id)
     {
-        return _db.Activity.FirstOrDefault(a => a.Id == id);
+        return _db.Activities.FirstOrDefault(a => a.Id == id);
     }
 
     public async Task<List<ActivityEntity>> Get24HoursActivities(long botId, long chatId, int utcOffset)
@@ -76,7 +76,7 @@ public class ActivityService
     
     public async Task<PagedList<ActivityEntity>> GetActivities(GetActivitiesDto dto, bool asNoTracking = false)
     {
-        IQueryable<ActivityEntity> activities = _db.Activity
+        IQueryable<ActivityEntity> activities = _db.Activities
                 .WhereIf(dto.Confirmed != null, a => a.Confirmed == dto.Confirmed)
                 .WhereIf(dto.Ids is not null && dto.Ids.Any(), a => dto.Ids.Contains(a.Id))
                 .WhereIf(dto.BotIds is not null && dto.BotIds.Any(), a => dto.BotIds.Contains(a.BotId))

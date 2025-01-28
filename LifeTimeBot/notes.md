@@ -1,9 +1,9 @@
 ### Команды для миграций
 ```bash
-dotnet ef migrations add ChangeDateTimeTypeToActivity -o Db/AppDb/Migrations --context AppDbContext --project LifeTimeBot/LifeTimeBot --startup-project LifeTimeBot/LifeTimeBot
+dotnet ef migrations add AddUserTaskNotificationEntity -o Db/AppDb/Migrations --context AppDbContext --project LifeTimeBot/LifeTimeBot --startup-project LifeTimeBot/LifeTimeBot
 
-dotnet ef database update --context AppDbContext --project MultipleTestBot/MultipleTestBot --startup-project MultipleTestBot/MultipleTestBot
+dotnet ef database update AddUserTaskEntity --context AppDbContext --project LifeTimeBot/LifeTimeBot --startup-project LifeTimeBot/LifeTimeBot
 
-dotnet ef migrations remove --context AppDbContext --project MultipleTestBot/MultipleTestBot --startup-project MultipleTestBot/MultipleTestBot
+dotnet ef migrations remove --context AppDbContext --project LifeTimeBot/LifeTimeBot --startup-project LifeTimeBot/LifeTimeBot
 
 ```

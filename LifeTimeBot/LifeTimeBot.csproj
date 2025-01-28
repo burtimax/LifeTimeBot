@@ -39,6 +39,8 @@
     <ItemGroup>
       <Folder Include="BotHandlers\UpdateType\" />
       <Folder Include="Db\AppDb\MIgrations\" />
+      <Folder Include="Endpoints\UserTaskNotification\" />
+      <Folder Include="Endpoints\UserTask\" />
     </ItemGroup>
 
 </Project>

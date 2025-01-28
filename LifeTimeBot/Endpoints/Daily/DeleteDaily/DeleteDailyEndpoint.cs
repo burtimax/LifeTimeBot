@@ -41,7 +41,7 @@ sealed class DeleteDailyActivityEndpoint : Endpoint<DeleteDailyActivityRequest>
         {
             Ids = new List<long>(){ r.Id }
         };
-        var activity = await _db.Activity.FirstOrDefaultAsync(a => a.Id == r.Id);
+        var activity = await _db.Activities.FirstOrDefaultAsync(a => a.Id == r.Id);
 
         if (activity == null)
         {
@@ -50,7 +50,7 @@ sealed class DeleteDailyActivityEndpoint : Endpoint<DeleteDailyActivityRequest>
         }
         
         //_db.Entry(res).State = EntityState.Deleted;
-        _db.Activity.Remove(activity);
+        _db.Activities.Remove(activity);
         await _db.SaveChangesAsync();
         await SendAsync(null);
     }

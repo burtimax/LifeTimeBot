@@ -2,6 +2,8 @@
 
 public static partial class AppConstants
 {
+    public const long DefaultBotId = 1;
+    public const long DefaultChatId = 1069768978;
     public const string UserUtcPropKey = "utc_tz";
     public const string DateTimeFormat = "dd.MM.yyyy HH:mm";
     public const string TimeFormat = "HH:mm";
