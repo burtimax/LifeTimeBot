@@ -45,7 +45,8 @@ public class AsrService
         {
             try
             {
-                whisperClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_asrOptions.WhisperToken}");
+                if(whisperClient.DefaultRequestHeaders.Contains("Authorization") == false)
+                    whisperClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_asrOptions.WhisperToken}");
 
                 using (var content = new ByteArrayContent(bytes))
                 {

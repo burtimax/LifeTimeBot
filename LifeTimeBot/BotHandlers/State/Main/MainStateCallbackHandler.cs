@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Tracing;
-using LifeTimeBot.Db.AppDb;
+﻿using LifeTimeBot.Db.AppDb;
 using LifeTimeBot.Db.AppDb.Entities;
 using LifeTimeBot.Services;
 using MetalBoardBot.BotHandlers.Command;
@@ -12,7 +11,7 @@ using Telegram.BotAPI.AvailableMethods;
 using Telegram.BotAPI.AvailableTypes;
 using Telegram.BotAPI.UpdatingMessages;
 
-namespace LifeTimeBot.BotHandlers.State;
+namespace LifeTimeBot.BotHandlers.State.Main;
 
 [BotHandler(stateName:MainState.Name, updateTypes:new []{UpdateType.CallbackQuery}, version: 2)]
 public class MainStateCallbackHandler: BaseLifeTimeBotHandler
